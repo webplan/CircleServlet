@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+        <!-- 指定全局国际化资源文件 -->
+        <constant name="struts.custom.i18n.resources" value="mess"/>
+        <!-- 指定国际化编码所使用的字符集 -->
+        <constant name="struts.i18n.encoding" value="UTF-8"/>
+        <!--指定constant的name为devMode表示处于开发模式，value=true修改配置文件内容自动热替换而不需要每次重新发布-->
+        <constant name="struts.devMode" value="true"/>
+        <!-- 所有的Action定义都应该放在package下,Struts2中通过package来管理action,这里的包名name并不对应java类中的包 -->
+        <package name="circle" extends="struts-default">
+                <action name="login" class="com.circle.servlet.Login">
+                        <result name="1" >/positive.jsp</result>
+                        <result name="0" >/positive.jsp</result>
+                </action>
+                <action name="register" class="com.circle.servlet.Register">
+                        <result name="1" >/positive.jsp</result>
+                        <result name="0" >/positive.jsp</result>
+                </action>
+                <action name="upload_contact" class="com.circle.servlet.UploadContact">
+                        <result name="1" >/positive.jsp</result>
+                        <result name="0" >/positive.jsp</result>
+                </action>
+                <action name="timeline" class="com.circle.servlet.TimeLine">
+                        <result name="1" >/positive.jsp</result>
+                        <result name="0" >/positive.jsp</result>
+                </action>
+                <action name="post_photo" class="com.circle.servlet.PostPhoto">
+                        <result name="1" >/positive.jsp</result>
+                        <result name="0" >/positive.jsp</result>
+                </action>
+                <action name="get_hotspot" class="com.circle.servlet.GetHotsPot">
+                        <result name="1" >/positive.jsp</result>
+                        <result name="0" >/positive.jsp</result>
+                </action>
+                <action name="get_comments" class="com.circle.servlet.GetComments">
+                        <result name="1" >/positive.jsp</result>
+                        <result name="0" >/positive.jsp</result>
+                </action>
+                <action name="post_comments" class="com.circle.servlet.PostComment">
+                        <result name="1" >/positive.jsp</result>
+                        <result name="0" >/positive.jsp</result>
+                </action>
+        </package>
+</struts>
