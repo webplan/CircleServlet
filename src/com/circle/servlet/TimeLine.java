@@ -3,24 +3,35 @@ package com.circle.servlet;/**
  */
 
 import com.circle.function.CheckToken;
+import com.circle.function.PrintToHtml;
 import com.opensymphony.xwork2.ActionSupport;
+import freemarker.log.Logger;
+import org.apache.struts2.interceptor.ServletResponseAware;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class TimeLine extends ActionSupport {
+public class TimeLine extends ActionSupport implements ServletResponseAware {
     private static final long serialVersionUID = 1L;
+
+    private HttpServletResponse response;
+    @Override
+    public void setServletResponse(HttpServletResponse httpServletResponse) {
+        this.response=httpServletResponse;
+    }
 
     private String account;
     private String token;
     private String page;
     private String perpage;
-    private String ret;
 
     //定义处理用户请求的execute方法
     public String execute() {
@@ -92,16 +103,9 @@ public class TimeLine extends ActionSupport {
             e.printStackTrace();
         }
         ret = obj.toString();
-        System.err.println("ret:" + ret);
-        return "1";
-    }
-
-    public String getRet() {
-        return ret;
-    }
-
-    public void setRet(String ret) {
-        this.ret = ret;
+        //System.err.println("ret:" + ret);
+        PrintToHtml.PrintToHtml(response,ret);
+        return null;
     }
 
     public String getAccount() {
@@ -135,5 +139,4 @@ public class TimeLine extends ActionSupport {
     public void setPerpage(String perpage) {
         this.perpage = perpage;
     }
-
 }

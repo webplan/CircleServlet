@@ -3,17 +3,26 @@ package com.circle.servlet;/**
  */
 
 import com.circle.function.MD5;
+import com.circle.function.PrintToHtml;
 import com.opensymphony.xwork2.ActionSupport;
+import org.apache.struts2.interceptor.ServletResponseAware;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Login extends ActionSupport{
+public class Login extends ActionSupport implements ServletResponseAware {
     private static final long serialVersionUID = 1L;
+
+    private HttpServletResponse response;
+    @Override
+    public void setServletResponse(HttpServletResponse httpServletResponse) {
+        this.response=httpServletResponse;
+    }
     private String ret;
     private String account;
     private String password_md5;
@@ -83,8 +92,8 @@ public class Login extends ActionSupport{
         }
 
         ret = obj.toString();
-
-        return "1";
+        PrintToHtml.PrintToHtml(response, ret);
+        return null;
     }
 
     public String getRet() {
