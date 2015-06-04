@@ -2,6 +2,7 @@ package com.circle.servlet;/**
  * Created by snow on 15-5-31.
  */
 
+import com.circle.function.MD5;
 import com.opensymphony.xwork2.ActionSupport;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 
 public class Login extends ActionSupport{
     private static final long serialVersionUID = 1L;
-
+    private String ret;
     private String account;
     private String password_md5;
 
@@ -42,8 +43,8 @@ public class Login extends ActionSupport{
 
             while(rs.next()){
                 if (rs.getString("password").equals(password_md5)){
-                    //TODO 写token
-                    String token = "snow";
+                    int x=(int)(Math.random()*100);
+                    String token = MD5.MD5(x + "");
                     sql = "UPDATE User set token='"+token+"' WHERE account='"+account+"'";
                     int rows = stmt.executeUpdate(sql) ;
                     if (rows==1){
@@ -84,6 +85,14 @@ public class Login extends ActionSupport{
         ret = obj.toString();
 
         return "1";
+    }
+
+    public String getRet() {
+        return ret;
+    }
+
+    public void setRet(String ret) {
+        this.ret = ret;
     }
 
     public String getAccount() {

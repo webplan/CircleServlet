@@ -2,6 +2,7 @@ package com.circle.servlet;/**
  * Created by snow on 15-6-1.
  */
 
+import com.circle.function.CheckToken;
 import com.opensymphony.xwork2.ActionSupport;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +19,7 @@ public class PostPhoto extends ActionSupport {
     private String token;
     private String text_description;
     private String photoUrl;
+    private String ret;
 
     //定义处理用户请求的execute方法
     public String execute() {
@@ -36,6 +38,14 @@ public class PostPhoto extends ActionSupport {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(url, username, userpassword);
             java.sql.Statement stmt = con.createStatement();
+            //判断token
+            boolean istoken = CheckToken.CheckToken(account, con, token);
+            if (!istoken){
+                obj.put("status",0);
+                ret = obj.toString();
+                System.err.println("ret:"+ret);
+                return "0";
+            }
 //            ResultSet rs = stmt.executeQuery(sql);
             int rows = stmt.executeUpdate(sql);
 //            boolean flag = stmt.execute(String sql) ;
@@ -62,6 +72,14 @@ public class PostPhoto extends ActionSupport {
         ret = obj.toString();
         System.err.println("ret:"+ret);
         return "1";
+    }
+
+    public String getRet() {
+        return ret;
+    }
+
+    public void setRet(String ret) {
+        this.ret = ret;
     }
 
     public String getAccount() {

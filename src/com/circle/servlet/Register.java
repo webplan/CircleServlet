@@ -16,6 +16,7 @@ public class Register extends ActionSupport {
     private String account;
     private String password_md5;
     private String nickname;
+    private String ret;
 
 
     //定义处理用户请求的execute方法
@@ -60,6 +61,14 @@ public class Register extends ActionSupport {
         ret = obj.toString();
         System.err.println("ret:"+ret);
         return "1";
+    }
+
+    public String getRet() {
+        return ret;
+    }
+
+    public void setRet(String ret) {
+        this.ret = ret;
     }
 
     public String getAccount() {
