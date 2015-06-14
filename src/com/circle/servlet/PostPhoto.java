@@ -4,6 +4,7 @@ package com.circle.servlet;/**
 
 import com.circle.function.CheckToken;
 import com.circle.function.PrintToHtml;
+import com.circle.function.UploadPhoto;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.json.JSONException;
@@ -26,7 +27,7 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
     private String account;
     private String token;
     private String text_description;
-    private byte[] image;
+    private String image;
 
     //定义处理用户请求的execute方法
     public String execute() {
@@ -36,11 +37,6 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
         String username = "root";
         String userpassword = "PENGZHI";
 
-        //TODO image存起來  傳一個url到數據庫
-        String imageUrl = "";
-        String sql = "INSERT INTO Message VALUES(\""+account+"\",\""+"NULL"
-                +"\",\""+text_description+"\",\""+imageUrl +
-                "\",\""+System.currentTimeMillis()+"\")";
         JSONObject obj = new JSONObject();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -48,7 +44,13 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
             java.sql.Statement stmt = con.createStatement();
             //判断token
             boolean istoken = CheckToken.CheckToken(account, con, token);
-            if (!istoken){
+
+            //image存起來  傳一個url到數據庫
+            String imageUrl = UploadPhoto.UploadPhoto(image);
+            String sql = "INSERT INTO Message VALUES(\""+account+"\",\""+"NULL"
+                    +"\",\""+text_description+"\",\""+imageUrl +
+                    "\",\""+System.currentTimeMillis()+"\")";
+            if (!istoken||imageUrl==null){
                 obj.put("status",0);
                 ret = obj.toString();
                 PrintToHtml.PrintToHtml(response, ret);
@@ -102,10 +104,10 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
         this.text_description = text_description;
     }
 
-    public byte[] getImage(){
+    public String getImage(){
         return image;
     }
-    public void setImage(byte[] image){
+    public void setImage(String image){
         this.image = image;
     }
 }

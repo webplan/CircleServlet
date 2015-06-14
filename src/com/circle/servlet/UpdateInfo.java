@@ -4,6 +4,7 @@ package com.circle.servlet;/**
 
 import com.circle.function.CheckToken;
 import com.circle.function.PrintToHtml;
+import com.circle.function.UploadPhoto;
 import com.opensymphony.xwork2.ActionSupport;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +29,7 @@ public class UpdateInfo extends ActionSupport implements ServletResponseAware {
     private String account;
     private String token;
     private String nickname;
-    private byte[] avatar;
+    private String avatar;
     private int gender;
     private String old_pwd_md5;
     private String new_pwd_md5;
@@ -39,21 +40,6 @@ public class UpdateInfo extends ActionSupport implements ServletResponseAware {
         String url = "jdbc:mysql://localhost:3306/Circle";
         String username = "root";
         String userpassword = "PENGZHI";
-        //TODO 存下來avatar，轉成avatarUrl
-        String avatarUrl = "";
-        String sql;
-        if (old_pwd_md5!=null&&new_pwd_md5!=null)
-            sql = "UPDATE User SET nickname="+nickname+
-                ",avatarUrl="+avatarUrl+
-                ",gender="+gender+
-                ",password="+new_pwd_md5+
-                "WHERE account = '" + account + "' AND password = " +
-                    "(SELECT password FROM USER WHERE account=" +account+")";
-        else
-            sql = "UPDATE User SET nickname="+nickname+
-                ",avatarUrl="+avatarUrl+
-                ",gender="+gender+
-                "WHERE account = '" + account + "'";
 
         JSONObject obj = new JSONObject();
         try {
@@ -61,6 +47,21 @@ public class UpdateInfo extends ActionSupport implements ServletResponseAware {
             Connection con = DriverManager.getConnection(url, username, userpassword);
             java.sql.Statement stmt = con.createStatement();
             boolean istoken = CheckToken.CheckToken(account, con, token);
+            // 存下來avatar，轉成avatarUrl
+            String avatarUrl = UploadPhoto.UploadPhoto(avatar);
+            String sql;
+            if (old_pwd_md5!=null&&new_pwd_md5!=null)
+                sql = "UPDATE User SET nickname="+nickname+
+                        ",avatarUrl="+avatarUrl+
+                        ",gender="+gender+
+                        ",password="+new_pwd_md5+
+                        "WHERE account = '" + account + "' AND password = " +
+                        "(SELECT password FROM USER WHERE account=" +account+")";
+            else
+                sql = "UPDATE User SET nickname="+nickname+
+                        ",avatarUrl="+avatarUrl+
+                        ",gender="+gender+
+                        "WHERE account = '" + account + "'";
             if (!istoken){
                 obj.put("status",0);
                 ret = obj.toString();
@@ -117,11 +118,11 @@ public class UpdateInfo extends ActionSupport implements ServletResponseAware {
         this.nickname = nickname;
     }
 
-    public byte[] getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(byte[] avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

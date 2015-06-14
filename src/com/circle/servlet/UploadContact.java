@@ -35,7 +35,7 @@ public class UploadContact extends ActionSupport  implements ServletResponseAwar
         String url = "jdbc:mysql://localhost:3306/Circle";
         String username = "root";
         String userpassword = "PENGZHI";
-        //TODO 写sql语句
+        //TODO 待改
         String sql = "SELECT * FROM User WHERE account = ''";
         JSONObject obj = new JSONObject();
         try {
