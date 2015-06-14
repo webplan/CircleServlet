@@ -1,52 +1,49 @@
 package com.circle.servlet;/**
- * Created by snow on 15-6-1.
+ * Created by snow on 15-6-13.
  */
 
 import com.circle.function.CheckToken;
 import com.circle.function.PrintToHtml;
 import com.opensymphony.xwork2.ActionSupport;
-import org.apache.struts2.interceptor.ServletResponseAware;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.servlet.http.HttpServletResponse;
+import org.apache.struts2.interceptor.ServletResponseAware;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.servlet.http.HttpServletResponse;
 
-public class PostPhoto extends ActionSupport implements ServletResponseAware {
+public class DeleteFriend extends ActionSupport implements ServletResponseAware {
     private static final long serialVersionUID = 1L;
-
     private HttpServletResponse response;
+
     @Override
     public void setServletResponse(HttpServletResponse httpServletResponse) {
-        this.response=httpServletResponse;
+        this.response = httpServletResponse;
     }
+
     private String account;
     private String token;
-    private String text_description;
-    private byte[] image;
+    private String friend_account;
 
     //定义处理用户请求的execute方法
     public String execute() {
-        System.err.println("enter:"+account+","+token+","+text_description+","+image);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle";
         String username = "root";
         String userpassword = "PENGZHI";
-
-        //TODO image存起來  傳一個url到數據庫
-        String imageUrl = "";
-        String sql = "INSERT INTO Message VALUES(\""+account+"\",\""+"NULL"
-                +"\",\""+text_description+"\",\""+imageUrl +
-                "\",\""+System.currentTimeMillis()+"\")";
+        String sql = "DELETE * FROM Friend WHERE userAccount = '" + account + "' AND " +
+                "friendAccount = '"+friend_account+"';" +
+                "DELETE * FROM Friend WHERE userAccount = '" + friend_account + "' AND " +
+                "friendAccount = '"+account+"'" ;
         JSONObject obj = new JSONObject();
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(url, username, userpassword);
             java.sql.Statement stmt = con.createStatement();
-            //判断token
             boolean istoken = CheckToken.CheckToken(account, con, token);
             if (!istoken){
                 obj.put("status",0);
@@ -54,12 +51,15 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
                 PrintToHtml.PrintToHtml(response, ret);
                 return null;
             }
-//            ResultSet rs = stmt.executeQuery(sql);
-            int rows = stmt.executeUpdate(sql);
+            //ResultSet rs = stmt.executeQuery(sql);
+            int rows = stmt.executeUpdate(sql) ;
 //            boolean flag = stmt.execute(String sql) ;
 
-            if (rows==1)
+            if (rows==2){
                 obj.put("status",1);
+            }else
+                obj.put("status",0);
+
             if (stmt != null)
                 stmt.close();
             if (con != null)
@@ -94,18 +94,12 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
         this.token = token;
     }
 
-    public String getText_description() {
-        return text_description;
+    public String getFriend_account() {
+        return friend_account;
     }
 
-    public void setText_description(String text_description) {
-        this.text_description = text_description;
+    public void setFriend_account(String friend_account) {
+        this.friend_account = friend_account;
     }
 
-    public byte[] getImage(){
-        return image;
-    }
-    public void setImage(byte[] image){
-        this.image = image;
-    }
 }

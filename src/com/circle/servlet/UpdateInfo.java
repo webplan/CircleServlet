@@ -1,52 +1,65 @@
 package com.circle.servlet;/**
- * Created by snow on 15-6-1.
+ * Created by snow on 15-6-13.
  */
 
 import com.circle.function.CheckToken;
 import com.circle.function.PrintToHtml;
 import com.opensymphony.xwork2.ActionSupport;
-import org.apache.struts2.interceptor.ServletResponseAware;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.servlet.http.HttpServletResponse;
+import org.apache.struts2.interceptor.ServletResponseAware;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.servlet.http.HttpServletResponse;
 
-public class PostPhoto extends ActionSupport implements ServletResponseAware {
+public class UpdateInfo extends ActionSupport implements ServletResponseAware {
     private static final long serialVersionUID = 1L;
-
     private HttpServletResponse response;
+
     @Override
     public void setServletResponse(HttpServletResponse httpServletResponse) {
-        this.response=httpServletResponse;
+        this.response = httpServletResponse;
     }
+
     private String account;
     private String token;
-    private String text_description;
-    private byte[] image;
+    private String nickname;
+    private byte[] avatar;
+    private int gender;
+    private String old_pwd_md5;
+    private String new_pwd_md5;
 
     //定义处理用户请求的execute方法
     public String execute() {
-        System.err.println("enter:"+account+","+token+","+text_description+","+image);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle";
         String username = "root";
         String userpassword = "PENGZHI";
+        //TODO 存下來avatar，轉成avatarUrl
+        String avatarUrl = "";
+        String sql;
+        if (old_pwd_md5!=null&&new_pwd_md5!=null)
+            sql = "UPDATE User SET nickname="+nickname+
+                ",avatarUrl="+avatarUrl+
+                ",gender="+gender+
+                ",password="+new_pwd_md5+
+                "WHERE account = '" + account + "' AND password = " +
+                    "(SELECT password FROM USER WHERE account=" +account+")";
+        else
+            sql = "UPDATE User SET nickname="+nickname+
+                ",avatarUrl="+avatarUrl+
+                ",gender="+gender+
+                "WHERE account = '" + account + "'";
 
-        //TODO image存起來  傳一個url到數據庫
-        String imageUrl = "";
-        String sql = "INSERT INTO Message VALUES(\""+account+"\",\""+"NULL"
-                +"\",\""+text_description+"\",\""+imageUrl +
-                "\",\""+System.currentTimeMillis()+"\")";
         JSONObject obj = new JSONObject();
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(url, username, userpassword);
             java.sql.Statement stmt = con.createStatement();
-            //判断token
             boolean istoken = CheckToken.CheckToken(account, con, token);
             if (!istoken){
                 obj.put("status",0);
@@ -55,11 +68,13 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
                 return null;
             }
 //            ResultSet rs = stmt.executeQuery(sql);
-            int rows = stmt.executeUpdate(sql);
+            int rows = stmt.executeUpdate(sql) ;
 //            boolean flag = stmt.execute(String sql) ;
-
             if (rows==1)
                 obj.put("status",1);
+            else
+                obj.put("status",0);
+
             if (stmt != null)
                 stmt.close();
             if (con != null)
@@ -94,18 +109,43 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
         this.token = token;
     }
 
-    public String getText_description() {
-        return text_description;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setText_description(String text_description) {
-        this.text_description = text_description;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public byte[] getImage(){
-        return image;
+    public byte[] getAvatar() {
+        return avatar;
     }
-    public void setImage(byte[] image){
-        this.image = image;
+
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
+    }
+
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
+
+    public String getOld_pwd_md5() {
+        return old_pwd_md5;
+    }
+
+    public void setOld_pwd_md5(String old_pwd_md5) {
+        this.old_pwd_md5 = old_pwd_md5;
+    }
+
+    public String getNew_pwd_md5() {
+        return new_pwd_md5;
+    }
+
+    public void setNew_pwd_md5(String new_pwd_md5) {
+        this.new_pwd_md5 = new_pwd_md5;
     }
 }

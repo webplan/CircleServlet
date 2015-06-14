@@ -29,7 +29,6 @@ public class GetHotsPot extends ActionSupport implements ServletResponseAware {
     private int msg_id;
     private int page;
     private int perpage;
-    private String ret;
 
 
     //定义处理用户请求的execute方法
@@ -49,8 +48,8 @@ public class GetHotsPot extends ActionSupport implements ServletResponseAware {
             if (!istoken){
                 obj.put("status",0);
                 ret = obj.toString();
-                System.err.println("ret:"+ret);
-                return "0";
+                PrintToHtml.PrintToHtml(response, ret);
+                return null;
             }
             ResultSet rs = stmt.executeQuery(sql);
 //            int rows = stmt.executeUpdate(sql) ;
@@ -62,9 +61,9 @@ public class GetHotsPot extends ActionSupport implements ServletResponseAware {
             while (rs.next()) {
                 JSONObject jsob = new JSONObject();
                 jsob.put("hotspots_id",rs.getString("potId"));
-                jsob.put("x",rs.getDouble("potX"));
-                jsob.put("y",rs.getDouble("potY"));
-
+                jsob.put("x",rs.getInt("potX"));
+                jsob.put("y",rs.getInt("potY"));
+                jsob.put("count",rs.getInt("number"));
                 jsonarray.put(num,jsob);
                 num++;
             }
@@ -92,14 +91,6 @@ public class GetHotsPot extends ActionSupport implements ServletResponseAware {
         ret = obj.toString();
         PrintToHtml.PrintToHtml(response, ret);
         return null;
-    }
-
-    public String getRet() {
-        return ret;
-    }
-
-    public void setRet(String ret) {
-        this.ret = ret;
     }
 
     public String getAccount() {

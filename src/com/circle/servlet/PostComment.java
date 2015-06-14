@@ -29,7 +29,6 @@ public class PostComment extends ActionSupport implements ServletResponseAware {
     private double x;
     private double y;
     private int messageId;
-    private String ret;
 
 
     //定义处理用户请求的execute方法
@@ -52,8 +51,8 @@ public class PostComment extends ActionSupport implements ServletResponseAware {
             if (!istoken){
                 obj.put("status",0);
                 ret = obj.toString();
-                System.err.println("ret:"+ret);
-                return "0";
+                PrintToHtml.PrintToHtml(response, ret);
+                return null;
             }
             ResultSet rs = stmt.executeQuery(sql);
 //            int rows = stmt.executeUpdate(sql) ;
@@ -63,7 +62,7 @@ public class PostComment extends ActionSupport implements ServletResponseAware {
                 potId = rs.getInt("potId");
             }
             System.err.println("potId:"+potId);
-            if (potId==-1){
+            if (potId==-1){//找不到pot，新建一個
                 sql = "INSERT INTO HostPot VALUES(\""+messageId+"\",\""+"NULL"
                         +"\",\""+x+"\",\""+y+"\")";
                 stmt = con.createStatement();
@@ -85,30 +84,17 @@ public class PostComment extends ActionSupport implements ServletResponseAware {
             if (con != null)
                 con.close();
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
                 obj.put("status", 0);
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }
             e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
         ret = obj.toString();
         PrintToHtml.PrintToHtml(response, ret);
         return null;
-    }
-
-
-    public String getRet() {
-        return ret;
-    }
-
-    public void setRet(String ret) {
-        this.ret = ret;
     }
 
     public String getAccount() {

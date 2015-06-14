@@ -30,7 +30,6 @@ public class GetComments extends ActionSupport implements ServletResponseAware {
     private int page;
     private int perpage;
     private int hotspots_id;
-    private String ret;
 
     //定义处理用户请求的execute方法
     public String execute() {
@@ -50,26 +49,23 @@ public class GetComments extends ActionSupport implements ServletResponseAware {
             if (!istoken){
                 obj.put("status",0);
                 ret = obj.toString();
-                System.err.println("ret:"+ret);
-                return "0";
+                PrintToHtml.PrintToHtml(response, ret);
+                return null;
             }
             ResultSet rs = stmt.executeQuery(sql);
 //            int rows = stmt.executeUpdate(sql) ;
 //            boolean flag = stmt.execute(String sql) ;
-            if (rs!=null)
-                obj.put("status",1);
             JSONArray jsonarray = new JSONArray();
-            int num = 0;
             while (rs.next()) {
                 JSONObject jsob = new JSONObject();
                 jsob.put("comment_id",rs.getInt("commentId"));
                 jsob.put("nickname",rs.getString("nickname"));
                 jsob.put("avatar_url",rs.getString("avatarUrl"));
                 jsob.put("content",rs.getString("content"));
-                jsob.put("post_time",rs.getInt("time"));
-                jsonarray.put(num,jsob);
-                num++;
+                jsob.put("post_time",rs.getLong("time"));
+                jsonarray.put(jsob);
             }
+            obj.put("status",1);
             obj.put("hotspots",jsonarray);
             if (rs != null) {
                 rs.close();
@@ -79,30 +75,18 @@ public class GetComments extends ActionSupport implements ServletResponseAware {
             if (con != null)
                 con.close();
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             try {
                 obj.put("status", 0);
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }
             e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
         ret = obj.toString();
         PrintToHtml.PrintToHtml(response, ret);
         return null;
-    }
-
-    public String getRet() {
-        return ret;
-    }
-
-    public void setRet(String ret) {
-        this.ret = ret;
     }
 
     public String getAccount() {

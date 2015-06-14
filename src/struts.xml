@@ -22,7 +22,6 @@
                 <action name="upload_contact" class="com.circle.servlet.UploadContact">
                 </action>
                 <action name="timeline" class="com.circle.servlet.TimeLine">
-                        <result name="1">/positive.jsp</result>
                 </action>
                 <action name="post_photo" class="com.circle.servlet.PostPhoto">
                 </action>
@@ -32,5 +31,11 @@
                 </action>
                 <action name="post_comments" class="com.circle.servlet.PostComment">
                 </action>
+                <action name="search_user" class="com.circle.servlet.SearchUser"></action>
+                <action name="add_friend" class="com.circle.servlet.AddFriend"></action>
+                <action name="delete_friend" class="com.circle.servlet.DeleteFriend"></action>
+                <action name="get_friends" class="com.circle.servlet.GetFriends"></action>
+                <action name="user_info" class="com.circle.servlet.UserInfo"></action>
+
         </package>
 </struts>
