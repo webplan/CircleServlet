@@ -31,5 +31,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Tomcat 8.0.23" level="application_server_libraries" />
     <orderEntry type="library" name="Struts 2-2.3.20.1" level="project" />
     <orderEntry type="library" name="java-json" level="project" />
+    <orderEntry type="library" scope="TEST" name="mysql-connector-java-5.1.35-bin" level="project" />
   </component>
 </module>

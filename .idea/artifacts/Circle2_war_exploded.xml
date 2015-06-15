@@ -9,6 +9,7 @@
         <element id="directory" name="lib">
           <element id="library" level="project" name="Struts 2-2.3.20.1" />
           <element id="library" level="project" name="java-json" />
+          <element id="library" level="project" name="mysql-connector-java-5.1.35-bin" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="Circle2/web/Web" />

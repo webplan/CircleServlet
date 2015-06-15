@@ -31,7 +31,7 @@ public class Login extends ActionSupport implements ServletResponseAware {
     public String execute() {
         System.err.println("login:"+account+","+password_md5);
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle";
+        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
         String username = "root";
         String userpassword = "PENGZHI";
         String sql = "SELECT * FROM User WHERE account=\'"+account+"\'";

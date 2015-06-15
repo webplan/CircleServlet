@@ -29,8 +29,8 @@ public class UploadPhoto {
         //生成獨一無二的imgpath
         do{
             int imageName=new Random().nextInt(1000)+1;
-            imgPath = path+""+imageName+".png";
-            retPath = retPath +""+imageName+".png";
+            imgPath = path+""+imageName+".jpg";
+            retPath = retPath +""+imageName+".jpg";
             f = new File(imgPath);
             f2 = new File(retPath);
         }while (f.exists()||f2.exists());
@@ -51,11 +51,14 @@ public class UploadPhoto {
         if (imgStr==null)
             return false;
         try {
-            byte[] b = new BASE64Decoder().decodeBuffer(imgStr);
+            String imgStr2 = imgStr.replaceAll(" ","+");
+            byte[] b = new BASE64Decoder().decodeBuffer(imgStr2);
             for (int i=0;i<b.length;i++){
                 if (b[i]<0) // 调整异常数据
                     b[i] += 256;
             }
+            System.err.println(imgStr2.length()+"::::length::::::::::::"+b.length);
+
             //生成jpeg圖片
             OutputStream out = new FileOutputStream(imgFilePath);
             out.write(b);

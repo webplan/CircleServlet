@@ -36,7 +36,7 @@ public class GetHotsPot extends ActionSupport implements ServletResponseAware {
         System.err.println("gethotspot:"+account+","+msg_id+","+token);
 
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle";
+        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
         String username = "root";
         String userpassword = "PENGZHI";
         String sql = "SELECT * FROM HotsPot WHERE messageId = '" + msg_id + "'";

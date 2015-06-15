@@ -35,7 +35,7 @@ public class PostComment extends ActionSupport implements ServletResponseAware {
     public String execute() {
         System.err.println("postcomment:"+account+","+token+","+content+","+x+","+y+","+msg_id);
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle";
+        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
         String username = "root";
         String userpassword = "PENGZHI";
         String sql = "SELECT potId FROM HotsPot WHERE potX='"+x+

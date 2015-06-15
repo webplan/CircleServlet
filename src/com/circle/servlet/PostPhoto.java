@@ -33,7 +33,7 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
     public String execute() {
         System.err.println("enter:"+account+","+token+","+text_description+","+image);
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle";
+        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";//?useUnicode=true&characterEncoding=UTF-8
         String username = "root";
         String userpassword = "PENGZHI";
 

@@ -32,7 +32,7 @@ public class UserInfo extends ActionSupport implements ServletResponseAware {
     //定义处理用户请求的execute方法
     public String execute() {
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle";
+        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
         String username = "root";
         String userpassword = "PENGZHI";
         String sql = "SELECT * FROM User WHERE account = '" + user_account + "'";

@@ -31,7 +31,7 @@ public class Register extends ActionSupport implements ServletResponseAware {
     public String execute(){
         System.err.println("register:"+account+","+password_md5+","+nickname);
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle";
+        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
         String username = "root";
         String userpassword = "PENGZHI";
         String sql = "INSERT INTO User ( account,password,nickname) VALUES(\""+account+"\",\""+password_md5
@@ -48,7 +48,12 @@ public class Register extends ActionSupport implements ServletResponseAware {
                 obj.put("status",1);
             }else
                 obj.put("status",0);
-
+            sql = "INSERT INTO Friend VALUES(\""+account+"\",\""+account+"\")";
+            rows = stmt.executeUpdate(sql) ;
+            if (rows==1){
+                obj.put("status",1);
+            }else
+                obj.put("status",0);
             if (stmt != null)
                 stmt.close();
             if (con != null)

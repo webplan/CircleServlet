@@ -38,7 +38,7 @@ public class TimeLine extends ActionSupport implements ServletResponseAware {
         System.err.println("timeline:" + account + "," + token + "," + page);
 
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle";
+        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
         String username = "root";
         String userpassword = "PENGZHI";
         //多行子查询 ：http://blog.csdn.net/devercn/article/details/22986

@@ -35,10 +35,10 @@ public class GetFriends extends ActionSupport implements ServletResponseAware {
     public String execute() {
         System.err.println("getfriends:"+account+","+token);
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle";
+        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
         String username = "root";
         String userpassword = "PENGZHI";
-        String sql = "SELECT * FROM User WHERE account = (" +
+        String sql = "SELECT * FROM User WHERE account = ALL(" +
                 "SELECT friendAccount FROM Friend WHERE userAccount = '" + account + "')";
         JSONObject obj = new JSONObject();
         try {
