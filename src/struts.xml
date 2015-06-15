@@ -29,7 +29,7 @@
                 </action>
                 <action name="get_comments" class="com.circle.servlet.GetComments">
                 </action>
-                <action name="post_comments" class="com.circle.servlet.PostComment">
+                <action name="post_comment" class="com.circle.servlet.PostComment">
                 </action>
                 <action name="search_user" class="com.circle.servlet.SearchUser"></action>
                 <action name="add_friend" class="com.circle.servlet.AddFriend"></action>

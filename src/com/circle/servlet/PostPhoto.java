@@ -46,12 +46,12 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
             boolean istoken = CheckToken.CheckToken(account, con, token);
 
             //image存起來  傳一個url到數據庫
-            String imageUrl = UploadPhoto.UploadPhoto(image);
-            String sql = "INSERT INTO Message VALUES(\""+account+"\",\""+"NULL"
-                    +"\",\""+text_description+"\",\""+imageUrl +
-                    "\",\""+System.currentTimeMillis()+"\")";
+            String imageUrl = UploadPhoto.UploadPhoto(image,account);
+            System.err.println("imageUrl:"+imageUrl);
+            String sql = "INSERT INTO Message (account,textDescription,imageUrl,time) VALUES(\""+account+"\",\""
+                    +text_description+"\",\""+imageUrl +"\",\""+System.currentTimeMillis()+"\")";
             if (!istoken||imageUrl==null){
-                obj.put("status",0);
+                obj.put("status",2);
                 ret = obj.toString();
                 PrintToHtml.PrintToHtml(response, ret);
                 return null;

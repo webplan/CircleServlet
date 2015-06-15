@@ -29,7 +29,7 @@ public class Login extends ActionSupport implements ServletResponseAware {
 
     //定义处理用户请求的execute方法
     public String execute() {
-        System.err.println("enter:"+account+","+password_md5);
+        System.err.println("login:"+account+","+password_md5);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle";
         String username = "root";

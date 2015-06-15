@@ -28,18 +28,18 @@ public class PostComment extends ActionSupport implements ServletResponseAware {
     private String content;
     private double x;
     private double y;
-    private int messageId;
+    private int msg_id;
 
 
     //定义处理用户请求的execute方法
     public String execute() {
-        System.err.println(account+","+token+","+content+","+x+","+y);
+        System.err.println("postcomment:"+account+","+token+","+content+","+x+","+y+","+msg_id);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle";
         String username = "root";
         String userpassword = "PENGZHI";
-        String sql = "SELECT potId FROM HostPot WHERE potX='"+x+
-                "' AND potY='"+y+"' AND messageId='"+messageId+"'";
+        String sql = "SELECT potId FROM HotsPot WHERE potX='"+x+
+                "' AND potY='"+y+"' AND messageId='"+msg_id+"'";
         int potId = -1;
         JSONObject obj = new JSONObject();
         try {
@@ -62,14 +62,22 @@ public class PostComment extends ActionSupport implements ServletResponseAware {
                 potId = rs.getInt("potId");
             }
             System.err.println("potId:"+potId);
-            if (potId==-1){//找不到pot，新建一個
-                sql = "INSERT INTO HostPot VALUES(\""+messageId+"\",\""+"NULL"
-                        +"\",\""+x+"\",\""+y+"\")";
+            while (potId==-1){//找不到pot，新建一個
+
+                sql = "INSERT INTO HotsPot (messageId,potX,potY) VALUES(\""+msg_id+
+                        "\",\""+x+"\",\""+y+"\")";
                 stmt = con.createStatement();
                 stmt.executeUpdate(sql);
+                sql = "SELECT potId FROM HotsPot WHERE messageId="+msg_id+" AND potX="+x+" AND potY="+y;
+                stmt = con.createStatement();
+                rs = stmt.executeQuery(sql);
+                while (rs.next()) {
+                    potId = rs.getInt("potId");
+                }
+                System.err.println("potId::::"+potId);
             }
             //插入comment
-            sql = "INSERT INTO Comment VALUES(\""+"NULL"+"\",\""+account
+            sql = "INSERT INTO Comment (userAccount,content,time,potId) VALUES(\""+account
                     +"\",\""+content+"\",\""+System.currentTimeMillis() + "\",\""+potId+"\")";
             stmt = con.createStatement();
             int rows = stmt.executeUpdate(sql);
@@ -137,12 +145,12 @@ public class PostComment extends ActionSupport implements ServletResponseAware {
         this.y = y;
     }
 
-    public int getMessageId() {
-        return messageId;
+    public int getMsg_id() {
+        return msg_id;
     }
 
-    public void setMessageId(int messageId) {
-        this.messageId = messageId;
+    public void setMsg_id(int msg_id) {
+        this.msg_id = msg_id;
     }
 
 }

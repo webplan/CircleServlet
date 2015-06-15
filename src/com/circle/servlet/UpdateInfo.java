@@ -36,6 +36,8 @@ public class UpdateInfo extends ActionSupport implements ServletResponseAware {
 
     //定义处理用户请求的execute方法
     public String execute() {
+        System.err.println("timeline:" + account + "," + token + "," + nickname+"," +
+                avatar+","+gender+","+old_pwd_md5+","+new_pwd_md5);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle";
         String username = "root";
@@ -48,7 +50,7 @@ public class UpdateInfo extends ActionSupport implements ServletResponseAware {
             java.sql.Statement stmt = con.createStatement();
             boolean istoken = CheckToken.CheckToken(account, con, token);
             // 存下來avatar，轉成avatarUrl
-            String avatarUrl = UploadPhoto.UploadPhoto(avatar);
+            String avatarUrl = UploadPhoto.UploadPhoto(avatar,account);
             String sql;
             if (old_pwd_md5!=null&&new_pwd_md5!=null)
                 sql = "UPDATE User SET nickname="+nickname+

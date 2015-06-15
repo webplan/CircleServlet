@@ -33,6 +33,8 @@ public class GetHotsPot extends ActionSupport implements ServletResponseAware {
 
     //定义处理用户请求的execute方法
     public String execute() {
+        System.err.println("gethotspot:"+account+","+msg_id+","+token);
+
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle";
         String username = "root";
@@ -57,15 +59,14 @@ public class GetHotsPot extends ActionSupport implements ServletResponseAware {
             if (rs!=null)
                 obj.put("status",1);
             JSONArray jsonarray = new JSONArray();
-            int num = 0;
             while (rs.next()) {
                 JSONObject jsob = new JSONObject();
-                jsob.put("hotspots_id",rs.getString("potId"));
+                jsob.put("hotspot_id",rs.getInt("potId"));
                 jsob.put("x",rs.getInt("potX"));
                 jsob.put("y",rs.getInt("potY"));
-                jsob.put("count",rs.getInt("number"));
-                jsonarray.put(num,jsob);
-                num++;
+                //TODO 獲取點的評論數量
+                jsob.put("count",0);
+                jsonarray.put(jsob);
             }
             obj.put("hotspots",jsonarray);
             if (rs != null) {

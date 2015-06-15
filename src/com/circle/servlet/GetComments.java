@@ -29,16 +29,17 @@ public class GetComments extends ActionSupport implements ServletResponseAware {
     private String token;
     private int page;
     private int perpage;
-    private int hotspots_id;
+    private int hotspot_id;
 
     //定义处理用户请求的execute方法
     public String execute() {
+        System.err.println("getcomments:"+account+","+hotspot_id+","+token);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle";
         String username = "root";
         String userpassword = "PENGZHI";
         String sql = "SELECT * FROM Comment,User WHERE Comment.userAccount=User.account " +
-                "AND potId = '" + hotspots_id + "'";
+                "AND potId = '" + hotspot_id + "'";
         JSONObject obj = new JSONObject();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -121,12 +122,12 @@ public class GetComments extends ActionSupport implements ServletResponseAware {
         this.perpage = perpage;
     }
 
-    public int getHotspots_id() {
-        return hotspots_id;
+    public int getHotspot_id() {
+        return hotspot_id;
     }
 
-    public void setHotspots_id(int hotspots_id) {
-        this.hotspots_id = hotspots_id;
+    public void setHotspot_id(int hotspot_id) {
+        this.hotspot_id = hotspot_id;
     }
 
 }

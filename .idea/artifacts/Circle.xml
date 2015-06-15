@@ -1,18 +1,17 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="Circle2:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/Circle2_war_exploded</output-path>
-    <root id="root">
+  <artifact type="war" name="Circle">
+    <output-path>$PROJECT_DIR$/out/artifacts/Circle</output-path>
+    <root id="archive" name="Circle.war">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="Circle2" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="Struts 2-2.3.20.1" />
           <element id="library" level="project" name="java-json" />
+          <element id="library" level="project" name="Struts 2-2.3.20.1" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="Circle2/web/Web" />
-      <element id="artifact" artifact-name="Circle" />
     </root>
   </artifact>
 </component>

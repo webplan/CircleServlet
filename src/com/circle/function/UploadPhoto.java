@@ -12,24 +12,32 @@ import java.util.Random;
  * Created by snow on 15-6-14.
  */
 public class UploadPhoto {
-    public static String UploadPhoto(String imgStr){
+    public static String UploadPhoto(String imgStr,String account){
         String path = ServletActionContext.getServletContext().getRealPath("/")+"upload";
+        String retPath = "upload/"+account+"/";
         File file = new File(path);
         if (!file.exists()){
             file.mkdir();
         }
+        path = path+"/"+account+"/";
+        file = new File(path);
+        if (!file.exists()){
+            file.mkdir();
+        }
         String imgPath;
-        File f;
+        File f,f2;
         //生成獨一無二的imgpath
         do{
             int imageName=new Random().nextInt(1000)+1;
-            imgPath = path+imageName;
+            imgPath = path+""+imageName+".png";
+            retPath = retPath +""+imageName+".png";
             f = new File(imgPath);
-        }while (f.exists());
+            f2 = new File(retPath);
+        }while (f.exists()||f2.exists());
 
         boolean isTrue = String2Image(imgStr,imgPath);
         if (isTrue)
-            return imgPath;
+            return retPath;
         else
             return null;
     }

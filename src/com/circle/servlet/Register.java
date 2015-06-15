@@ -29,13 +29,13 @@ public class Register extends ActionSupport implements ServletResponseAware {
 
     //定义处理用户请求的execute方法
     public String execute(){
-        System.err.println("enter:"+account+","+password_md5+","+nickname);
+        System.err.println("register:"+account+","+password_md5+","+nickname);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle";
         String username = "root";
         String userpassword = "PENGZHI";
-        String sql = "INSERT INTO User VALUES(\""+account+"\",\""+password_md5
-                +"\",\""+nickname+"\",\""+"" + "\",\""+""+"\")";
+        String sql = "INSERT INTO User ( account,password,nickname) VALUES(\""+account+"\",\""+password_md5
+                +"\",\""+nickname+""+"\")";
         JSONObject obj = new JSONObject();
         try {
             Class.forName("com.mysql.jdbc.Driver");

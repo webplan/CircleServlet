@@ -31,6 +31,7 @@ public class SearchUser extends ActionSupport implements ServletResponseAware {
 
     //定义处理用户请求的execute方法
     public String execute() {
+        System.err.println("searchuser:"+account+","+token+","+nickname);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle";
         String username = "root";
