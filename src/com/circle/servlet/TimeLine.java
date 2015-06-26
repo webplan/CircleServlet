@@ -39,8 +39,8 @@ public class TimeLine extends ActionSupport implements ServletResponseAware {
 
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "root";
-        String userpassword = "PENGZHI";
+        String username = "circle";
+        String userpassword = "circleServer";
         //多行子查询 ：http://blog.csdn.net/devercn/article/details/22986
         String sql = "SELECT * FROM Message,User WHERE Message.account in" +
                 "(SELECT FriendAccount FROM Friend WHERE UserAccount='" + account + "')"+
@@ -53,7 +53,7 @@ public class TimeLine extends ActionSupport implements ServletResponseAware {
             //判断token
             boolean istoken = CheckToken.CheckToken(account, con, token);
             if (!istoken){
-                obj.put("status",0);
+                obj.put("status",2);
                 ret = obj.toString();
                 PrintToHtml.PrintToHtml(response, ret);
                 return null;

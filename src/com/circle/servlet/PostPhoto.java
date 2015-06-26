@@ -34,8 +34,8 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
         System.err.println("enter:"+account+","+token+","+text_description+","+image);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";//?useUnicode=true&characterEncoding=UTF-8
-        String username = "root";
-        String userpassword = "PENGZHI";
+        String username = "circle";
+        String userpassword = "circleServer";
 
         JSONObject obj = new JSONObject();
         try {
@@ -50,8 +50,14 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
             System.err.println("imageUrl:"+imageUrl);
             String sql = "INSERT INTO Message (account,textDescription,imageUrl,time) VALUES(\""+account+"\",\""
                     +text_description+"\",\""+imageUrl +"\",\""+System.currentTimeMillis()+"\")";
-            if (!istoken||imageUrl==null){
+            if (!istoken){
                 obj.put("status",2);
+                ret = obj.toString();
+                PrintToHtml.PrintToHtml(response, ret);
+                return null;
+            }
+            if(imageUrl==null){
+                obj.put("status",0);
                 ret = obj.toString();
                 PrintToHtml.PrintToHtml(response, ret);
                 return null;

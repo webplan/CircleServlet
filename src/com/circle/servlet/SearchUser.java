@@ -34,8 +34,8 @@ public class SearchUser extends ActionSupport implements ServletResponseAware {
         System.err.println("searchuser:"+account+","+token+","+nickname);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "root";
-        String userpassword = "PENGZHI";
+        String username = "circle";
+        String userpassword = "circleServer";
         String sql = "SELECT * FROM User WHERE nickname = '" + nickname + "'";
         JSONObject obj = new JSONObject();
         try {
@@ -44,7 +44,7 @@ public class SearchUser extends ActionSupport implements ServletResponseAware {
             java.sql.Statement stmt = con.createStatement();
             boolean istoken = CheckToken.CheckToken(account, con, token);
             if (!istoken){
-                obj.put("status",0);
+                obj.put("status",2);
                 ret = obj.toString();
                 PrintToHtml.PrintToHtml(response, ret);
                 return null;

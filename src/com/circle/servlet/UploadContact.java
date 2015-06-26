@@ -33,8 +33,8 @@ public class UploadContact extends ActionSupport  implements ServletResponseAwar
     public String execute(){
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "root";
-        String userpassword = "PENGZHI";
+        String username = "circle";
+        String userpassword = "circleServer";
         //TODO 待改
         String sql = "SELECT * FROM User WHERE account = ''";
         JSONObject obj = new JSONObject();
@@ -45,7 +45,7 @@ public class UploadContact extends ActionSupport  implements ServletResponseAwar
             //判断token
             boolean istoken = CheckToken.CheckToken(account, con, token);
             if (!istoken){
-                obj.put("status",0);
+                obj.put("status",2);
                 ret = obj.toString();
                 System.err.println("ret:"+ret);
                 return "0";

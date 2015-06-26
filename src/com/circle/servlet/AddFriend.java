@@ -36,8 +36,8 @@ public class AddFriend extends ActionSupport implements ServletResponseAware {
         System.err.println("addfriend:"+account+","+friend_account+","+token);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "root";
-        String userpassword = "PENGZHI";
+        String username = "circle";
+        String userpassword = "circleServer";
         String sql = "INSERT INTO Friend VALUES(\""+account+"\",\""+
                 friend_account +"\")"+",(\""+friend_account+"\",\""+
                 account +"\");";
@@ -48,7 +48,7 @@ public class AddFriend extends ActionSupport implements ServletResponseAware {
             java.sql.Statement stmt = con.createStatement();
             boolean istoken = CheckToken.CheckToken(account, con, token);
             if (!istoken){
-                obj.put("status",0);
+                obj.put("status",2);
                 ret = obj.toString();
                 PrintToHtml.PrintToHtml(response, ret);
                 return null;

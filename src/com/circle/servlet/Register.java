@@ -32,8 +32,8 @@ public class Register extends ActionSupport implements ServletResponseAware {
         System.err.println("register:"+account+","+password_md5+","+nickname);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "root";
-        String userpassword = "PENGZHI";
+        String username = "circle";
+        String userpassword = "circleServer";
         String sql = "INSERT INTO User ( account,password,nickname) VALUES(\""+account+"\",\""+password_md5
                 +"\",\""+nickname+""+"\")";
         JSONObject obj = new JSONObject();

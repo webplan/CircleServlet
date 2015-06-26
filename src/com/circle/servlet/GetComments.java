@@ -36,8 +36,8 @@ public class GetComments extends ActionSupport implements ServletResponseAware {
         System.err.println("getcomments:"+account+","+hotspot_id+","+token);
         String ret = "";
         String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "root";
-        String userpassword = "PENGZHI";
+        String username = "circle";
+        String userpassword = "circleServer";
         String sql = "SELECT * FROM Comment,User WHERE Comment.userAccount=User.account " +
                 "AND potId = '" + hotspot_id + "'";
         JSONObject obj = new JSONObject();
@@ -48,7 +48,7 @@ public class GetComments extends ActionSupport implements ServletResponseAware {
             //判断token
             boolean istoken = CheckToken.CheckToken(account,con,token);
             if (!istoken){
-                obj.put("status",0);
+                obj.put("status",2);
                 ret = obj.toString();
                 PrintToHtml.PrintToHtml(response, ret);
                 return null;
