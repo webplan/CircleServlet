@@ -4,6 +4,7 @@ package com.circle.servlet;/**
 
 import com.circle.function.CheckToken;
 import com.circle.function.PrintToHtml;
+import com.circle.function.Servlet;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.json.JSONException;
@@ -35,71 +36,9 @@ public class PostComment extends ActionSupport implements ServletResponseAware {
     public String execute() {
         System.err.println("postcomment:"+account+","+token+","+content+","+x+","+y+","+msg_id);
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "circle";
-        String userpassword = "circleServer";
-        String sql = "SELECT potId FROM HotsPot WHERE potX='"+x+
-                "' AND potY='"+y+"' AND messageId='"+msg_id+"'";
-        int potId = -1;
-        JSONObject obj = new JSONObject();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, username, userpassword);
-            java.sql.Statement stmt = con.createStatement();
-            //判断token
-            boolean istoken = CheckToken.CheckToken(account, con, token);
-            if (!istoken){
-                obj.put("status",2);
-                ret = obj.toString();
-                PrintToHtml.PrintToHtml(response, ret);
-                return null;
-            }
-            ResultSet rs = stmt.executeQuery(sql);
-//            int rows = stmt.executeUpdate(sql) ;
-//            boolean flag = stmt.execute(String sql) ;
 
-            while (rs.next()) {
-                potId = rs.getInt("potId");
-            }
-            System.err.println("potId:"+potId);
-            while (potId==-1){//找不到pot，新建一個
+        JSONObject obj = Servlet.postComment(account,token,content,x,y,msg_id);
 
-                sql = "INSERT INTO HotsPot (messageId,potX,potY) VALUES(\""+msg_id+
-                        "\",\""+x+"\",\""+y+"\")";
-                stmt = con.createStatement();
-                stmt.executeUpdate(sql);
-                sql = "SELECT potId FROM HotsPot WHERE messageId="+msg_id+" AND potX="+x+" AND potY="+y;
-                stmt = con.createStatement();
-                rs = stmt.executeQuery(sql);
-                while (rs.next()) {
-                    potId = rs.getInt("potId");
-                }
-                System.err.println("potId::::"+potId);
-            }
-            //插入comment
-            sql = "INSERT INTO Comment (userAccount,content,time,potId) VALUES(\""+account
-                    +"\",\""+content+"\",\""+System.currentTimeMillis() + "\",\""+potId+"\")";
-            stmt = con.createStatement();
-            int rows = stmt.executeUpdate(sql);
-            if (rows==1)
-                obj.put("status",1);
-
-            if (rs != null) {
-                rs.close();
-            }
-            if (stmt != null)
-                stmt.close();
-            if (con != null)
-                con.close();
-
-        } catch (Exception e) {
-            try {
-                obj.put("status", 0);
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
-        }
         ret = obj.toString();
         PrintToHtml.PrintToHtml(response, ret);
         return null;

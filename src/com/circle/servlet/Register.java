@@ -3,6 +3,7 @@ package com.circle.servlet;/**
  */
 
 import com.circle.function.PrintToHtml;
+import com.circle.function.Servlet;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.json.JSONException;
@@ -24,64 +25,18 @@ public class Register extends ActionSupport implements ServletResponseAware {
     private String account;
     private String password_md5;
     private String nickname;
-    private String ret;
 
 
     //定义处理用户请求的execute方法
     public String execute(){
         System.err.println("register:"+account+","+password_md5+","+nickname);
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "circle";
-        String userpassword = "circleServer";
-        String sql = "INSERT INTO User ( account,password,nickname) VALUES(\""+account+"\",\""+password_md5
-                +"\",\""+nickname+""+"\")";
-        JSONObject obj = new JSONObject();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, username, userpassword);
-            java.sql.Statement stmt = con.createStatement();
-            //判断是否用户名重复,如果重复则跳到catch中，如果插入行数不为1则插入失败，
-            int rows = stmt.executeUpdate(sql) ;
 
-            if (rows==1){
-                obj.put("status",1);
-            }else
-                obj.put("status",0);
-            sql = "INSERT INTO Friend VALUES(\""+account+"\",\""+account+"\")";
-            rows = stmt.executeUpdate(sql) ;
-            if (rows==1){
-                obj.put("status",1);
-            }else
-                obj.put("status",0);
-            if (stmt != null)
-                stmt.close();
-            if (con != null)
-                con.close();
+        JSONObject obj = Servlet.register(account,password_md5,nickname);
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            try {
-                obj.put("status",0);
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         ret = obj.toString();
         PrintToHtml.PrintToHtml(response, ret);
         return null;
-    }
-
-    public String getRet() {
-        return ret;
-    }
-
-    public void setRet(String ret) {
-        this.ret = ret;
     }
 
     public String getAccount() {

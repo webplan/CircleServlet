@@ -4,6 +4,7 @@ package com.circle.servlet;/**
 
 import com.circle.function.CheckToken;
 import com.circle.function.PrintToHtml;
+import com.circle.function.Servlet;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.json.JSONArray;
@@ -36,59 +37,8 @@ public class GetHotsPot extends ActionSupport implements ServletResponseAware {
         System.err.println("gethotspot:"+account+","+msg_id+","+token);
 
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "circle";
-        String userpassword = "circleServer";
-        String sql = "SELECT * FROM HotsPot WHERE messageId = '" + msg_id + "'";
-        JSONObject obj = new JSONObject();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, username, userpassword);
-            java.sql.Statement stmt = con.createStatement();
-            //判断token
-            boolean istoken = CheckToken.CheckToken(account,con,token);
-            if (!istoken){
-                obj.put("status",2);
-                ret = obj.toString();
-                PrintToHtml.PrintToHtml(response, ret);
-                return null;
-            }
-            ResultSet rs = stmt.executeQuery(sql);
-//            int rows = stmt.executeUpdate(sql) ;
-//            boolean flag = stmt.execute(String sql) ;
-            if (rs!=null)
-                obj.put("status",1);
-            JSONArray jsonarray = new JSONArray();
-            while (rs.next()) {
-                JSONObject jsob = new JSONObject();
-                jsob.put("hotspot_id",rs.getInt("potId"));
-                jsob.put("x",rs.getInt("potX"));
-                jsob.put("y",rs.getInt("potY"));
-                //TODO 獲取點的評論數量
-                jsob.put("count",0);
-                jsonarray.put(jsob);
-            }
-            obj.put("hotspots",jsonarray);
-            if (rs != null) {
-                rs.close();
-            }
-            if (stmt != null)
-                stmt.close();
-            if (con != null)
-                con.close();
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            try {
-                obj.put("status", 0);
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject obj = Servlet.getHotsPot(account,token,msg_id);
         ret = obj.toString();
         PrintToHtml.PrintToHtml(response, ret);
         return null;

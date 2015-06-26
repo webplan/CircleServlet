@@ -4,6 +4,7 @@ package com.circle.servlet;/**
 
 import com.circle.function.CheckToken;
 import com.circle.function.PrintToHtml;
+import com.circle.function.Servlet;
 import com.circle.function.UploadPhoto;
 import com.opensymphony.xwork2.ActionSupport;
 import org.json.JSONException;
@@ -39,58 +40,9 @@ public class UpdateInfo extends ActionSupport implements ServletResponseAware {
         System.err.println("timeline:" + account + "," + token + "," + nickname+"," +
                 avatar+","+gender+","+old_pwd_md5+","+new_pwd_md5);
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "circle";
-        String userpassword = "circleServer";
 
-        JSONObject obj = new JSONObject();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, username, userpassword);
-            java.sql.Statement stmt = con.createStatement();
-            boolean istoken = CheckToken.CheckToken(account, con, token);
-            // 存下來avatar，轉成avatarUrl
-            String avatarUrl = UploadPhoto.UploadPhoto(avatar,account);
-            String sql;
-            if (old_pwd_md5!=null&&new_pwd_md5!=null)
-                sql = "UPDATE User SET nickname="+nickname+
-                        ",avatarUrl="+avatarUrl+
-                        ",gender="+gender+
-                        ",password="+new_pwd_md5+
-                        "WHERE account = '" + account + "' AND password = " +
-                        "(SELECT password FROM USER WHERE account=" +account+")";
-            else
-                sql = "UPDATE User SET nickname="+nickname+
-                        ",avatarUrl="+avatarUrl+
-                        ",gender="+gender+
-                        "WHERE account = '" + account + "'";
-            if (!istoken){
-                obj.put("status",2);
-                ret = obj.toString();
-                PrintToHtml.PrintToHtml(response, ret);
-                return null;
-            }
-//            ResultSet rs = stmt.executeQuery(sql);
-            int rows = stmt.executeUpdate(sql) ;
-//            boolean flag = stmt.execute(String sql) ;
-            if (rows==1)
-                obj.put("status",1);
-            else
-                obj.put("status",0);
+        JSONObject obj = Servlet.updateInfo(account,token,nickname,avatar,gender,old_pwd_md5,new_pwd_md5);
 
-            if (stmt != null)
-                stmt.close();
-            if (con != null)
-                con.close();
-
-        } catch (Exception e) {
-            try {
-                obj.put("status", 0);
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
-        }
         ret = obj.toString();
         PrintToHtml.PrintToHtml(response, ret);
         return null;

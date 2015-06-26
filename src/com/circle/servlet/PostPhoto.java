@@ -4,6 +4,7 @@ package com.circle.servlet;/**
 
 import com.circle.function.CheckToken;
 import com.circle.function.PrintToHtml;
+import com.circle.function.Servlet;
 import com.circle.function.UploadPhoto;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.interceptor.ServletResponseAware;
@@ -33,54 +34,9 @@ public class PostPhoto extends ActionSupport implements ServletResponseAware {
     public String execute() {
         System.err.println("enter:"+account+","+token+","+text_description+","+image);
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";//?useUnicode=true&characterEncoding=UTF-8
-        String username = "circle";
-        String userpassword = "circleServer";
 
-        JSONObject obj = new JSONObject();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, username, userpassword);
-            java.sql.Statement stmt = con.createStatement();
-            //判断token
-            boolean istoken = CheckToken.CheckToken(account, con, token);
+        JSONObject obj = Servlet.postPhoto(account,token,text_description,image);
 
-            //image存起來  傳一個url到數據庫
-            String imageUrl = UploadPhoto.UploadPhoto(image,account);
-            System.err.println("imageUrl:"+imageUrl);
-            String sql = "INSERT INTO Message (account,textDescription,imageUrl,time) VALUES(\""+account+"\",\""
-                    +text_description+"\",\""+imageUrl +"\",\""+System.currentTimeMillis()+"\")";
-            if (!istoken){
-                obj.put("status",2);
-                ret = obj.toString();
-                PrintToHtml.PrintToHtml(response, ret);
-                return null;
-            }
-            if(imageUrl==null){
-                obj.put("status",0);
-                ret = obj.toString();
-                PrintToHtml.PrintToHtml(response, ret);
-                return null;
-            }
-//            ResultSet rs = stmt.executeQuery(sql);
-            int rows = stmt.executeUpdate(sql);
-//            boolean flag = stmt.execute(String sql) ;
-
-            if (rows==1)
-                obj.put("status",1);
-            if (stmt != null)
-                stmt.close();
-            if (con != null)
-                con.close();
-
-        } catch (Exception e) {
-            try {
-                obj.put("status", 0);
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
-        }
         ret = obj.toString();
         PrintToHtml.PrintToHtml(response, ret);
         return null;

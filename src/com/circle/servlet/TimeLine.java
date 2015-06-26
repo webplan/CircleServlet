@@ -4,6 +4,7 @@ package com.circle.servlet;/**
 
 import com.circle.function.CheckToken;
 import com.circle.function.PrintToHtml;
+import com.circle.function.Servlet;
 import com.opensymphony.xwork2.ActionSupport;
 import freemarker.log.Logger;
 import org.apache.struts2.interceptor.ServletResponseAware;
@@ -38,74 +39,9 @@ public class TimeLine extends ActionSupport implements ServletResponseAware {
         System.err.println("timeline:" + account + "," + token + "," + page);
 
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "circle";
-        String userpassword = "circleServer";
-        //多行子查询 ：http://blog.csdn.net/devercn/article/details/22986
-        String sql = "SELECT * FROM Message,User WHERE Message.account in" +
-                "(SELECT FriendAccount FROM Friend WHERE UserAccount='" + account + "')"+
-                " AND Message.account=User.account ORDER BY Message.time DESC ";
-        JSONObject obj = new JSONObject();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, username, userpassword);
-            java.sql.Statement stmt = con.createStatement();
-            //判断token
-            boolean istoken = CheckToken.CheckToken(account, con, token);
-            if (!istoken){
-                obj.put("status",2);
-                ret = obj.toString();
-                PrintToHtml.PrintToHtml(response, ret);
-                return null;
-            }
-            ResultSet rs = stmt.executeQuery(sql);
-//            int rows = stmt.executeUpdate(sql) ;
-//            boolean flag = stmt.execute(String sql) ;
 
-            JSONArray jsonarray = new JSONArray();
-            if (rs == null)
-                obj.put("status", 0);
-            else {
-                while (rs.next()) {
-                    JSONObject jsob = new JSONObject();
-                    //msg_id 是我存到数据库messageId
-                    jsob.put("msg_id", rs.getString("messageId"));
-                    jsob.put("nickname", rs.getString("nickname"));
-                    jsob.put("avatar_url", rs.getString("avatarUrl"));
-                    jsob.put("photo_url", rs.getString("imageUrl"));
-                    jsob.put("text_description", rs.getString("textDescription"));
-                    //jsob.put("voice_description_url",rs.getString("voiceDescriptionUrl"));
-                    jsob.put("post_time", rs.getLong("time"));
-
-                    jsonarray.put(jsob);
-                    int s = jsonarray.length();
-                    jsob = jsonarray.getJSONObject(0);
-                }
-            }
-            obj.put("status", 1);
-            obj.put("timeline", jsonarray);
-            if (rs != null) {
-                rs.close();
-            }
-            if (stmt != null)
-                stmt.close();
-            if (con != null)
-                con.close();
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            try {
-                obj.put("status", 0);
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject obj = Servlet.timeLine(account,token);
         ret = obj.toString();
-        //System.err.println("ret:" + ret);
         PrintToHtml.PrintToHtml(response,ret);
         return null;
     }

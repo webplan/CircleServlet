@@ -4,6 +4,7 @@ package com.circle.servlet;/**
 
 import com.circle.function.CheckToken;
 import com.circle.function.PrintToHtml;
+import com.circle.function.Servlet;
 import com.opensymphony.xwork2.ActionSupport;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,51 +34,7 @@ public class SearchUser extends ActionSupport implements ServletResponseAware {
     public String execute() {
         System.err.println("searchuser:"+account+","+token+","+nickname);
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "circle";
-        String userpassword = "circleServer";
-        String sql = "SELECT * FROM User WHERE nickname = '" + nickname + "'";
-        JSONObject obj = new JSONObject();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, username, userpassword);
-            java.sql.Statement stmt = con.createStatement();
-            boolean istoken = CheckToken.CheckToken(account, con, token);
-            if (!istoken){
-                obj.put("status",2);
-                ret = obj.toString();
-                PrintToHtml.PrintToHtml(response, ret);
-                return null;
-            }
-            ResultSet rs = stmt.executeQuery(sql);
-//            int rows = stmt.executeUpdate(sql) ;
-//            boolean flag = stmt.execute(String sql) ;
-
-            JSONArray jsonarray = new JSONArray();
-            while (rs.next()) {
-                JSONObject jsob = new JSONObject();
-                jsob.put("account",rs.getString("account"));
-                jsob.put("avatar_url",rs.getString("avatarUrl"));
-                jsonarray.put(jsob);
-            }
-            obj.put("person",jsonarray);
-            obj.put("status",1);
-            if (rs != null) {
-                rs.close();
-            }
-            if (stmt != null)
-                stmt.close();
-            if (con != null)
-                con.close();
-
-        } catch (Exception e) {
-            try {
-                obj.put("status", 0);
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
-        }
+        JSONObject obj = Servlet.searchUser(account,token,nickname);
         ret = obj.toString();
         PrintToHtml.PrintToHtml(response, ret);
         return null;

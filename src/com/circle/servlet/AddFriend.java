@@ -4,6 +4,7 @@ package com.circle.servlet;/**
 
 import com.circle.function.CheckToken;
 import com.circle.function.PrintToHtml;
+import com.circle.function.Servlet;
 import com.opensymphony.xwork2.ActionSupport;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,8 +26,6 @@ public class AddFriend extends ActionSupport implements ServletResponseAware {
         this.response = httpServletResponse;
     }
 
-
-
     private String account;
     private String token;
     private String friend_account;
@@ -35,49 +34,9 @@ public class AddFriend extends ActionSupport implements ServletResponseAware {
     public String execute() {
         System.err.println("addfriend:"+account+","+friend_account+","+token);
         String ret = "";
-        String url = "jdbc:mysql://localhost:3306/Circle?useUnicode=true&characterEncoding=UTF-8";
-        String username = "circle";
-        String userpassword = "circleServer";
-        String sql = "INSERT INTO Friend VALUES(\""+account+"\",\""+
-                friend_account +"\")"+",(\""+friend_account+"\",\""+
-                account +"\");";
-        JSONObject obj = new JSONObject();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, username, userpassword);
-            java.sql.Statement stmt = con.createStatement();
-            boolean istoken = CheckToken.CheckToken(account, con, token);
-            if (!istoken){
-                obj.put("status",2);
-                ret = obj.toString();
-                PrintToHtml.PrintToHtml(response, ret);
-                return null;
-            }
-//            ResultSet rs = stmt.executeQuery(sql);
-            int rows = stmt.executeUpdate(sql) ;
-//            boolean flag = stmt.execute(String sql) ;
-            if (rows==2){
-                obj.put("status",1);
-            }else{
-                obj.put("status",0);
-                ret = obj.toString();
-                PrintToHtml.PrintToHtml(response, ret);
-                return null;
-            }
 
-            if (stmt != null)
-                stmt.close();
-            if (con != null)
-                con.close();
+        JSONObject obj = Servlet.addFriend(account,token,friend_account);
 
-        } catch (Exception e) {
-            try {
-                obj.put("status", 0);
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
-        }
         ret = obj.toString();
         PrintToHtml.PrintToHtml(response, ret);
         return null;
