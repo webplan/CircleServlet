@@ -1,41 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE struts PUBLIC
-        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
-        "http://struts.apache.org/dtds/struts-2.3.dtd">
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
 
 <!--suppress ALL -->
 <struts>
-        <!-- 指定全局国际化资源文件 -->
-        <constant name="struts.custom.i18n.resources" value="mess"/>
-        <!-- 指定国际化编码所使用的字符集 -->
-        <constant name="struts.i18n.encoding" value="UTF-8"/>
-        <!--指定constant的name为devMode表示处于开发模式，value=true修改配置文件内容自动热替换而不需要每次重新发布-->
-        <constant name="struts.devMode" value="true"/>
-        <!-- 所有的Action定义都应该放在package下,Struts2中通过package来管理action,这里的包名name并不对应java类中的包 -->
+    <!-- 指定全局国际化资源文件 -->
+    <constant name="struts.custom.i18n.resources" value="mess"/>
+    <!-- 指定国际化编码所使用的字符集 -->
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <!--指定constant的name为devMode表示处于开发模式，value=true修改配置文件内容自动热替换而不需要每次重新发布-->
+    <constant name="struts.devMode" value="true"/>
+    <!-- 所有的Action定义都应该放在package下,Struts2中通过package来管理action,这里的包名name并不对应java类中的包 -->
 
-        <package name="circle" extends="struts-default">
-                <action name="login" class="com.circle.servlet.Login">
-                </action>
-                <action name="register" class="com.circle.servlet.Register">
-                </action>
-                <action name="upload_contact" class="com.circle.servlet.UploadContact">
-                </action>
-                <action name="timeline" class="com.circle.servlet.TimeLine">
-                </action>
-                <action name="post_photo" class="com.circle.servlet.PostPhoto">
-                </action>
-                <action name="get_hotspot" class="com.circle.servlet.GetHotsPot">
-                </action>
-                <action name="get_comments" class="com.circle.servlet.GetComments">
-                </action>
-                <action name="post_comment" class="com.circle.servlet.PostComment">
-                </action>
-                <action name="search_user" class="com.circle.servlet.SearchUser"></action>
-                <action name="add_friend" class="com.circle.servlet.AddFriend"></action>
-                <action name="delete_friend" class="com.circle.servlet.DeleteFriend"></action>
-                <action name="get_friends" class="com.circle.servlet.GetFriends"></action>
-                <action name="user_info" class="com.circle.servlet.UserInfo"></action>
+    <package name="circle" extends="struts-default">
+        <action name="login" class="com.circle.servlet.Login">
+        </action>
+        <action name="register" class="com.circle.servlet.Register">
+        </action>
+        <action name="upload_contact" class="com.circle.servlet.UploadContact">
+        </action>
+        <action name="timeline" class="com.circle.servlet.TimeLine">
+        </action>
+        <action name="post_photo" class="com.circle.servlet.PostPhoto">
+        </action>
+        <action name="get_hotspot" class="com.circle.servlet.GetHotsPot">
+        </action>
+        <action name="get_comments" class="com.circle.servlet.GetComments">
+        </action>
+        <action name="post_comment" class="com.circle.servlet.PostComment">
+        </action>
+        <action name="search_user" class="com.circle.servlet.SearchUser"></action>
+        <action name="add_friend" class="com.circle.servlet.AddFriend"></action>
+        <action name="delete_friend" class="com.circle.servlet.DeleteFriend"></action>
+        <action name="get_friends" class="com.circle.servlet.GetFriends"></action>
+        <action name="user_info" class="com.circle.servlet.UserInfo"></action>
+        <action name="update_info" class="com.circle.servlet.UpdateInfo"></action>
 
-        </package>
+    </package>
 </struts>

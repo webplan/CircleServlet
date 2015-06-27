@@ -1,13 +1,6 @@
 <component name="libraryTable">
   <library name="javax.annotation">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../lib/ssh/javaee6/javax.annotation.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../../lib/ssh/javaee6/javax.ejb.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../../lib/ssh/javaee6/javax.jms.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../../lib/ssh/javaee6/javax.resource.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../../lib/ssh/javaee6/javax.servlet.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../../lib/ssh/javaee6/javax.servlet.jsp.jar!/" />
-    </CLASSES>
+    <CLASSES />
     <JAVADOC />
     <SOURCES />
   </library>
